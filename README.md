@@ -70,3 +70,34 @@ usage: node markstopdf [--ids 123456,345678,...] [--mail n] --config config.json
 
 If you have any questions or feedback, contact Alan Thomas
 <alan.thomas@unimelb.edu.au> or <colton.carner ‘at’ unimelb.edu.au>
+
+
+?   .gitignore
+?   markstopdf.js
+?   package.json
+?   README.md
+?
+????examples
+?   ?   COOK10001-example-with-comments.json
+?   ?   COOK10001-example.json
+?   ?   COOK10001-example.xlsx
+?   ?
+?   ????cook_canvas_submissions
+?           ...
+?
+????fonts
+?       ...
+?
+????input
+    ?   myPdfSpec.json
+    ?   myStudentGrades.csv
+    ?
+    ????canvas_submissions
+            .gitignore **[Don’t remove; allows empty directory in git]**
+            student1LnameFname_canvasidentifiers_studentPdfTitle1.pdf
+            student2LnameFname_canvasidentifiers_studentPdfTitle2.pdf
+
+		
+		
+
+

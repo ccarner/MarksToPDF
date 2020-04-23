@@ -2,6 +2,8 @@
 *.csv
 node_modules
 *.log
+#want to leave an empty folder 'canvas_submissions' in input to maintain structure
 input/*
+!input/canvas_submissions
 output/*
 
