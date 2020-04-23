@@ -6,13 +6,13 @@ marks and feedback. It can also email the feedback PDFs to students as they are
 generated.
 
 
-##Canvas Modifications
+## Canvas Modifications
 
-Canvas allows for bulk re-uploading of files as comments on students submissions, eg we can attach a pdf with feedback to each student's submissions. To do this, however, the name of the downloaded canvas submission from teh student must be the SAME as the name of the file being reuploaded to canvas; the feature was designed to allow instructors to annotate ON the existing assignment and the reupload, we're sort of hijacking it.
+Canvas allows for bulk re-uploading of files as comments on students submissions, eg we can attach a pdf with feedback to each student's submissions. To do this, however, the name of the downloaded canvas submission from the student must be the SAME as the name of the file being reuploaded to canvas; the feature was designed to allow instructors to annotate ON the existing assignment and the reupload, we're sort of hijacking it.
 
 More details can be found in the canvas help article here: https://community.canvaslms.com/docs/DOC-12803-4152640871
 
-##Note: need to manually check for dupes
+## Note: need to manually check for dupes
 
 As part of its process,the script searches for a filename in the input/canvas_submissions foldername/ID of the student.
 Script uses ID+name if the filename has the student's ID in it;  since canvas doesn't actually add the unimelb studentID to the filename when exporting, this requires students to manually add their ID in their submission title
@@ -37,23 +37,25 @@ debug the JSON.
 
 2. Before running the script for the first time, run `npm install` to fetch dependencies.
 
-3. Prepare a CSV file with student marks. This should contain one row for every student (rows with no student number, or an invalid student number, will be ignored). The row containing the maximum available marks for each question should come before the first student row. If you are going to use the email functionality, make sure there is a column that contains student email addresses.
+3. Prepare a CSV file with student marks. This should contain one row for every student (rows with no student number, or an invalid student number, will be ignored). The row containing the maximum available marks for each question should come before the first student row. If you are going to use the email functionality, make sure there is a column that contains student email addresses. Place this file into `/input`
 - If there are students who should not receive feedback (e.g. suspected of academic misconduct), you can either delete their rows from the CSV, or mask the email addresses by prefixing them with XXXX or similar.
 
-5. Prepare a configuration JSON file. There are various example JSON files included in `/example`, which contain documentation explaining what is required. If you need advice, or you want to do something that does not appear possible, please contact Alan Thomas <alan.thomas@unimelb.edu.au>.
+4. Prepare a configuration JSON file. There are various example JSON files included in `/example`, which contain documentation explaining what is required. If you need advice, or you want to do something that does not appear possible, please contact Alan Thomas <alan.thomas@unimelb.edu.au>. Place this file into `/input`
 
-7. Download all canvas documents, and place into `input/canvas_submissions`
+5. Download all canvas documents, and place into `input/canvas_submissions`
 
 6. Run the script. A typical invocation to generate PDFs without emailing them might look like:
 
 ```
 $ node markstopdf.js --config info20003-2018-s1-a1.json --csv a1studentmarks.csv
 ```
-See the 'command line args' section below for more details.
+- See the 'command line args' section below for more details.
 
 7. [Note to Colton: for further notes on how to upload to canvas, see onenote Tutoring notebook]
 
-##Commandline Args
+The structure should look as follows (with your own csv and pdf spec from steps 3 and 4, and your student marks from step 5 in place)
+
+## Commandline Args
 
 ```
 usage: node markstopdf [--ids 123456,345678,...] [--mail n] --config config.json --csv marks.csv
@@ -69,35 +71,5 @@ usage: node markstopdf [--ids 123456,345678,...] [--mail n] --config config.json
 ## Contact
 
 If you have any questions or feedback, contact Alan Thomas
-<alan.thomas@unimelb.edu.au> or <colton.carner ‘at’ unimelb.edu.au>
-
-
-?   .gitignore
-?   markstopdf.js
-?   package.json
-?   README.md
-?
-????examples
-?   ?   COOK10001-example-with-comments.json
-?   ?   COOK10001-example.json
-?   ?   COOK10001-example.xlsx
-?   ?
-?   ????cook_canvas_submissions
-?           ...
-?
-????fonts
-?       ...
-?
-????input
-    ?   myPdfSpec.json
-    ?   myStudentGrades.csv
-    ?
-    ????canvas_submissions
-            .gitignore **[Don’t remove; allows empty directory in git]**
-            student1LnameFname_canvasidentifiers_studentPdfTitle1.pdf
-            student2LnameFname_canvasidentifiers_studentPdfTitle2.pdf
-
-		
-		
-
+<alan.thomas@unimelb.edu.au> or <colton.carner â€˜atâ€™ unimelb.edu.au>
 
