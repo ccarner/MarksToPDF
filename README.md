@@ -5,7 +5,6 @@ on a spreadsheet (in CSV format) containing each student's personal details,
 marks and feedback. It can also email the feedback PDFs to students as they are
 generated.
 
-
 ## Canvas Modifications
 
 Canvas allows for bulk re-uploading of files as comments on students submissions, eg we can attach a pdf with feedback to each student's submissions. To do this, however, the name of the downloaded canvas submission from the student must be the SAME as the name of the file being reuploaded to canvas; the feature was designed to allow instructors to annotate ON the existing assignment and the reupload, we're sort of hijacking it.
@@ -17,8 +16,6 @@ More details can be found in the canvas help article here: https://community.can
 As part of its process,the script searches for a filename in the input/canvas_submissions foldername/ID of the student.
 Script uses ID+name if the filename has the student's ID in it;  since canvas doesn't actually add the unimelb studentID to the filename when exporting, this requires students to manually add their ID in their submission title
 ELSE if no match found with id+name, script tries again with only matching name. This could cause an issue with duplicates: if a student who shares an identical first+lastname doesn't include their ID in the title, when the script goes to search using just the name, it might match with the other student with the same name (regardless of whether that other student included their student number). The script warns if it uses studentname to identify a student, and then you'll need to manually check that that name isn't shared with someone else in the cohort.
-
-
 
 ## Examples
 
@@ -42,7 +39,7 @@ debug the JSON.
 
 4. Prepare a configuration JSON file. There are various example JSON files included in `/example`, which contain documentation explaining what is required. If you need advice, or you want to do something that does not appear possible, please contact Alan Thomas <alan.thomas@unimelb.edu.au>. Place this file into `/input`
 
-5. Download all canvas documents, and place into `input/canvas_submissions`
+5. Download all canvas submissions, and place into `input/canvas_submissions`
 
 6. Run the script. A typical invocation to generate PDFs without emailing them might look like:
 
@@ -54,6 +51,35 @@ $ node markstopdf.js --config info20003-2018-s1-a1.json --csv a1studentmarks.csv
 7. [Note to Colton: for further notes on how to upload to canvas, see onenote Tutoring notebook]
 
 The structure should look as follows (with your own csv and pdf spec from steps 3 and 4, and your student marks from step 5 in place)
+```
+|   .gitignore
+|   markstopdf.js
+|   package.json
+|   README.md
+|
+----examples
+|   |   COOK10001-example-with-comments.json
+|   |   COOK10001-example.json
+|   |   COOK10001-example.xlsx
+|   |
+|   ----cook_canvas_submissions
+|           ...
+|
+----fonts
+|      ...
+|
+----input
+    |   myPdfSpec.json
+    |   myStudentGrades.csv
+    |
+    ----canvas_submissions
+            .gitignore **[Don’t remove; allows empty directory in git]**
+            student1LnameFname_canvasidentifiers_studentPdfTitle1.pdf
+            student2LnameFname_canvasidentifiers_studentPdfTitle2.pdf
+```
+
+
+
 
 ## Commandline Args
 
