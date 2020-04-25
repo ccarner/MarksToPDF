@@ -14,6 +14,7 @@
     "url": "git://bitbucket.org/atlight/markstopdf.git"
   },
   "dependencies": {
+    "chalk": "^4.0.0",
     "csv": "^2.0.0",
     "dateformat": "^3.0.3",
     "minimist": "^1.2.0",
