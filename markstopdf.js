@@ -107,13 +107,23 @@ if (mailMode > 0) {
 
 function ensureColumnsHasKey(key) {
   if (!config.columns.hasOwnProperty(key)) {
-    console.error(
-      'Error: In the config JSON file, the "columns" object must ' +
-        'contain a "' +
-        key +
-        '" key.'
-    );
-    process.exit();
+    if (key !== "personalFeedback") {
+      console.error(
+        'Error: In the config JSON file, the "columns" object must ' +
+          'contain a "' +
+          key +
+          '" key.'
+      );
+      process.exit();
+    } else {
+      // not having personal feedback might be intentional
+      console.warn(
+        chalk.red(
+          "Warn: No 'personal feedback' column key found." +
+            "This might be intentional if no personal feedback was given"
+        )
+      );
+    }
   }
 }
 
@@ -279,6 +289,7 @@ function generateStudentPdf(studentRowIndex, maxMarksRow) {
   var studentLastName =
     studentRow[columnToIndex(config.columns.studentLastName)];
   var studentEmail = studentRow[columnToIndex(config.columns.studentEmail)];
+  var totalMarks = studentRow[columnToIndex(config.columns.totalMarks)];
 
   var studentNumberAsInt = parseInt(studentNumber, 10);
 
@@ -384,16 +395,35 @@ function generateStudentPdf(studentRowIndex, maxMarksRow) {
   }
 
   if (pdfFileName === undefined) {
-    console.log(
-      chalk.bgRed(
-        "\nCan't find a canvas submission filename for " +
-          studentFirstName +
-          " " +
-          studentLastName +
-          " [skipping]"
-      )
-    );
-    console.log(chalk.red("canvas name was: " + canvasName));
+    if (totalMarks != 0) {
+      console.log(
+        chalk.bgRed(
+          "\nERROR: Can't find canvas submission for " +
+            studentFirstName +
+            " " +
+            studentLastName +
+            "<canvas name: " +
+            canvasName +
+            " >" +
+            " [skipping] (had a non-zero total score of " +
+            totalMarks +
+            ")"
+        )
+      );
+    } else {
+      console.log(
+        chalk.red(
+          "\nWARN: Can't find canvas submission for " +
+            studentFirstName +
+            " " +
+            studentLastName +
+            "<canvas name: " +
+            canvasName +
+            " >" +
+            " [skipping] (had 0 total score, likely didn't submit)"
+        )
+      );
+    }
     numSkipped++;
     moveToNext(1);
     return;

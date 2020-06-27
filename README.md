@@ -14,7 +14,7 @@ More details can be found in the canvas help article here: https://community.can
 ## Note: need to manually check for dupes
 
 As part of its process,the script searches for a filename in the input/canvas_submissions foldername/ID of the student.
-Script uses ID+name if the filename has the student's ID in it;  since canvas doesn't actually add the unimelb studentID to the filename when exporting, this requires students to manually add their ID in their submission title
+Script uses ID+name if the filename has the student's ID in it; since canvas doesn't actually add the unimelb studentID to the filename when exporting, this requires students to manually add their ID in their submission title
 ELSE if no match found with id+name, script tries again with only matching name. This could cause an issue with duplicates: if a student who shares an identical first+lastname doesn't include their ID in the title, when the script goes to search using just the name, it might match with the other student with the same name (regardless of whether that other student included their student number). The script warns if it uses studentname to identify a student, and then you'll need to manually check that that name isn't shared with someone else in the cohort.
 
 ## Examples
@@ -23,7 +23,7 @@ Refer to the COOK10001 example Excel sheet, JSON file, and CanvasSubmissions dow
 
 I recommend that you work from the JSON file without comments. MarksToPDF will
 accept comments in the config JSON file, but JSON validators like
-https://jsonlint.com won't work if you have comments. 
+https://jsonlint.com won't work if you have comments.
 
 If the tool reports a syntax error in the JSON, use https://jsonlint.com to
 debug the JSON.
@@ -35,6 +35,7 @@ debug the JSON.
 2. Before running the script for the first time, run `npm install` to fetch dependencies.
 
 3. Prepare a CSV file with student marks. This should contain one row for every student (rows with no student number, or an invalid student number, will be ignored). The row containing the maximum available marks for each question should come before the first student row. If you are going to use the email functionality, make sure there is a column that contains student email addresses. Place this file into `/input`
+
 - If there are students who should not receive feedback (e.g. suspected of academic misconduct), you can either delete their rows from the CSV, or mask the email addresses by prefixing them with XXXX or similar.
 
 4. Prepare a configuration JSON file. There are various example JSON files included in `/example`, which contain documentation explaining what is required. If you need advice, or you want to do something that does not appear possible, please contact Alan Thomas <alan.thomas@unimelb.edu.au>. Place this file into `/input`
@@ -46,11 +47,13 @@ debug the JSON.
 ```
 $ node markstopdf.js --config info20003-2018-s1-a1.json --csv a1studentmarks.csv
 ```
+
 - See the 'command line args' section below for more details.
 
 7. [Note to Colton: for further notes on how to upload to canvas, see onenote Tutoring notebook]
 
-The structure should look as follows (with your own csv and pdf spec from steps 3 and 4, and your student marks from step 5 in place)
+The structure should look as follows (with your own csv and pdf spec from steps 3 and 4, and your student assignments from step 5 in place)
+
 ```
 |   .gitignore
 |   markstopdf.js
@@ -73,13 +76,10 @@ The structure should look as follows (with your own csv and pdf spec from steps 
     |   myStudentGrades.csv
     |
     ----canvas_submissions
-            .gitignore **[Don’t remove; allows empty directory in git]**
+            .gitignore **[Don't remove; allows empty git directory]**
             student1LnameFname_canvasidentifiers_studentPdfTitle1.pdf
             student2LnameFname_canvasidentifiers_studentPdfTitle2.pdf
 ```
-
-
-
 
 ## Commandline Args
 
@@ -93,9 +93,7 @@ usage: node markstopdf [--ids 123456,345678,...] [--mail n] --config config.json
 --csv marks.csv       required: the CSV file containing the marks data
 ```
 
-
 ## Contact
 
 If you have any questions or feedback, contact Alan Thomas
 <alan.thomas@unimelb.edu.au> or <colton.carner ‘at’ unimelb.edu.au>
-
