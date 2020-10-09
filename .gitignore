@@ -5,5 +5,8 @@ node_modules
 #want to leave an empty folder 'canvas_submissions' in input to maintain structure
 input/*
 !input/canvas_submissions
+input/canvas_submissions/*
+!input/canvas_submissions/.gitignore
 output/*
+!output/.gitignore
 

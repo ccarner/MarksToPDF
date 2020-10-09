@@ -31,7 +31,8 @@ var nodemailer = require("nodemailer");
 var promptly = require("promptly");
 var dateformat = require("dateformat");
 
-var versionString = "Marks to PDF 1.0 by Alan Thomas";
+var versionString =
+  "Marks to PDF CANVAS EDITION 1.1 by Alan Thomas and Colton Carner";
 
 // Initial processing
 console.log(versionString);
@@ -365,13 +366,16 @@ function generateStudentPdf(studentRowIndex, maxMarksRow) {
   var canvasName = (studentLastName + studentFirstName)
     .toLowerCase()
     .replace(/[ '\-,`~]/g, "");
+  var lastNameToMatch = studentLastName.toLowerCase().replace(/[ '\-,`~]/g, "");
   //eg Kah-sheng, O'brien, people with names with spaces in them.
 
   filenames.forEach((filename) => {
     //need to match student ID (might not be included, we ask students to name their submission but theyre a bit dull sometimes)
     if (filename.includes(studentNumber)) {
       var filenameFirstComponent = filename.split("_")[0];
-      if (filenameFirstComponent === canvasName) {
+      // also check that first component was something LIKE what we expected their student name to be...
+      // only checking last name since some people use preferred first names, or have long names and so are truncated
+      if (filenameFirstComponent.includes(lastNameToMatch)) {
         pdfFileName = filename;
       }
     }
@@ -399,17 +403,29 @@ function generateStudentPdf(studentRowIndex, maxMarksRow) {
       console.log(
         chalk.bgRed(
           "\nERROR: Can't find canvas submission for " +
+            studentNumber +
+            " " +
             studentFirstName +
             " " +
             studentLastName +
             "<canvas name: " +
             canvasName +
             " >" +
-            " [skipping] (had a non-zero total score of " +
+            " [Generated with prefix 'MISSING_CANVAS_SUBMISSION...'] (had a non-zero total score of " +
             totalMarks +
             ")"
         )
       );
+
+      // still generate the file if non-0 score, was likely just manually submitted via email or such
+      pdfFileName =
+        "MISSING_CANVAS_SUBMISSION_" +
+        studentNumber +
+        "_" +
+        studentLastName +
+        "_" +
+        studentFirstName +
+        ".pdf";
     } else {
       console.log(
         chalk.red(
@@ -423,10 +439,14 @@ function generateStudentPdf(studentRowIndex, maxMarksRow) {
             " [skipping] (had 0 total score, likely didn't submit)"
         )
       );
+      // skipped only if they got 0
+      numSkipped++;
+      moveToNext(1);
+      return;
     }
-    numSkipped++;
-    moveToNext(1);
-    return;
+  } else {
+    // in case students submitted eg an SQL file
+    pdfFileName = pdfFileName.split(".")[0] + ".pdf";
   }
 
   // The definition of the PDF document, including metadata, content and styles
