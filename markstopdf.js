@@ -273,6 +273,7 @@ function generateStudentPdf(studentRowIndex, maxMarksRow) {
       );
       mailer && mailer.close();
       console.log(chalk.red("Number of students skipped was " + numSkipped));
+      console.log(chalk.red("Number of with invalid IDs was " + numInvalidId));
     } else {
       // Generate the next one!
       setTimeout(
@@ -294,14 +295,15 @@ function generateStudentPdf(studentRowIndex, maxMarksRow) {
 
   var studentNumberAsInt = parseInt(studentNumber, 10);
 
-  // Is this student number blank or too small?
-  if (isNaN(studentNumberAsInt) || studentNumberAsInt < 10000) {
+  // Is this student number blank (removed too small check since some canvas IDs are small)
+  if (isNaN(studentNumberAsInt)) {
     if (!studentFirstName && !studentLastName) {
       // Output nothing when ignoring a row with no first name, last name
       // or student number
     } else if (mailMode === 0) {
       // Print the letter "x" to indicate "invalid" when not in mail mode
       process.stdout.write("x");
+      numInvalidId++;
     } else if (
       !idsToInclude ||
       idsToInclude.indexOf(studentNumber.trim()) !== -1
@@ -641,11 +643,12 @@ function setUpMailerAndGo() {
 var mailer;
 var numSuccessful = 0;
 var numSkipped = 0;
+var numInvalidId = 0;
 if (mailMode === 0) {
   // No mailing, just generate the PDFs
-  console.log("");
-  log("S = skipped, x = invalid student ID");
-  log("");
+  log(
+    "\nS = skipped [if ID's to generate PDFs for was given as a cmdline arg] \nx = invalid student ID \n"
+  );
   readCsvAndIterate();
 } else if (mailMode === 2 && !idsToInclude) {
   console.log("");
